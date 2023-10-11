@@ -40,7 +40,7 @@ function GetDays(response: Response) {
   now.setHours(now.getHours() + now.getTimezoneOffset() / 60 + response.city.timezone / 3600);
   for (let i = 0; i < response.list.length; i++) {
     const date = toDateTime(
-      response.list[i].dt + response.city.timezone - now.getTimezoneOffset() * 60
+      response.list[i].dt + response.city.timezone + now.getTimezoneOffset() * 60
     );
     if (now.toString().slice(0, 16) === date.toString().slice(0, 16)) {
       days.days[0]?.day?.push(response.list[i]);
