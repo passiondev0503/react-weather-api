@@ -68,7 +68,7 @@ function Weather() {
     <Container>
       {city && weather?.days ? (
         <>
-          <Card className="mt-3 bg-customblue text-white customshadow">
+          <Card className="my-3 bg-customblue text-white customshadow">
             <Card.Body className="py-1 px-3">
               <Row className="mb-2">
                 {weather.days.map((e, index) => {
@@ -82,7 +82,11 @@ function Weather() {
                         setDay(index);
                       }}
                     >
-                      <Card className={index === day ? 'text-white bg-customblue p-0' : 'text-white bg-customlightblue p-0 customhover'}>
+                      <Card
+                        className={
+                          index === day ? 'text-white bg-customblue p-0 customshadow' : 'text-white bg-customlightblue p-0 customhover customshadow'
+                        }
+                      >
                         <Card.Body className="p-1">
                           <p className="m-0 text-center">
                             {Math.round(temp[1])}
@@ -107,7 +111,7 @@ function Weather() {
                 })}
               </Row>
               <Row className="mb-2 Row">
-                <Card className="text-white bg-customlightblue p-0">
+                <Card className="text-white bg-customlightblue p-0 customshadow">
                   <Card.Body>
                     <Row className="Row">
                       <Col className="mb-3">
@@ -150,7 +154,7 @@ function Weather() {
                 {Array.from(
                   { length: 8 - weather.days[day]?.day.length > 3 ? 8 - weather.days[day]?.day.length - 4 : 8 - weather.days[day]?.day.length },
                   (_, index) => (
-                    <Card key={index} className="text-white bg-customlightblue rounded-0 w-25 p-0 customhover">
+                    <Card key={index} className="text-white bg-customlightblue rounded-0 w-25 p-0 customshadow">
                       <Card.Body className="p-1"></Card.Body>
                     </Card>
                   )
@@ -159,7 +163,9 @@ function Weather() {
                   <Card
                     key={index}
                     className={
-                      index === hour ? 'text-white bg-customblue rounded-0 w-25 p-0' : 'text-white bg-customlightblue rounded-0 w-25 p-0 customhover'
+                      index === hour
+                        ? 'text-white bg-customblue rounded-0 w-25 p-0 customshadow'
+                        : 'text-white bg-customlightblue rounded-0 w-25 p-0 customhover customshadow'
                     }
                     onClick={() => setHour(index)}
                   >
