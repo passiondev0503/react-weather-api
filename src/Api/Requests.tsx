@@ -36,6 +36,25 @@ export function RequestLocation() {
   return from(apiCall);
 }
 
+export function RequestCity(search: String) {
+  const apiCall = fetch(`https://api.api-ninjas.com/v1/city?name=${search}`, {
+    method: 'GET',
+    headers: {
+      'X-Api-Key': `${process.env.REACT_APP_NINJAS_API_KEY}`,
+    },
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (responseJson.error !== undefined) throw 'error';
+      if (responseJson.length === 0) return '';
+      return responseJson[0].name;
+    })
+    .catch((error) => {
+      throw 'error';
+    });
+  return from(apiCall);
+}
+
 export function getCookie(name: string) {
   name = name + '=';
   let ca = document.cookie.split(';');
