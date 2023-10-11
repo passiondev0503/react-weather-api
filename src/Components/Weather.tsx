@@ -154,7 +154,7 @@ function Weather() {
                 {Array.from(
                   { length: 8 - weather.days[day]?.day.length > 3 ? 8 - weather.days[day]?.day.length - 4 : 8 - weather.days[day]?.day.length },
                   (_, index) => (
-                    <Card key={index} className="text-white bg-customlightblue rounded-0 w-25 p-0 customshadow">
+                    <Card key={index} className="text-white bg-customblue rounded-0 w-25 p-0 customshadow">
                       <Card.Body className="p-1"></Card.Body>
                     </Card>
                   )
