@@ -1,8 +1,8 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { Epic, ofType } from 'redux-observable';
-import { Observable, map, mergeMap } from 'rxjs';
+import { Observable, catchError, map, mergeMap } from 'rxjs';
 import { RequestWeather } from './Requests';
-import { getWeather } from './WeatherSlice';
+import { getWeather, setErrorMessage } from './WeatherSlice';
 import { Response } from '../Types/Response';
 
 export const getWeatherByCity = (city: string) => ({

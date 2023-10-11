@@ -16,9 +16,15 @@ export const weatherSlice = createSlice({
   initialState,
   reducers: {
     getWeather: (state, action: PayloadAction<Response>) => {
-      state.City = action.payload.city;
-      state.Days = GetDays(action.payload);
-      console.log(state.Days);
+      if (action.payload.cod === '404') {
+        setErrorMessage('City does not exist');
+      } else {
+        state.City = action.payload.city;
+        state.Days = GetDays(action.payload);
+      }
+    },
+    setErrorMessage: (state, action: PayloadAction<String>) => {
+      state.error = '';
     },
     clearErrorMessage: (state) => {
       state.error = '';
@@ -34,12 +40,8 @@ function GetDays(response: Response) {
   now.setHours(now.getHours() + now.getTimezoneOffset() / 60 + response.city.timezone / 3600);
   for (let i = 0; i < response.list.length; i++) {
     const date = toDateTime(
-      response.list[i].dt + response.city.timezone + now.getTimezoneOffset() * 60
+      response.list[i].dt + response.city.timezone - now.getTimezoneOffset() * 60
     );
-    console.log(response.list[i]);
-    console.log(now.toString());
-    console.log(date.toString());
-    console.log(now.toString().slice(0, 16) === date.toString().slice(0, 16));
     if (now.toString().slice(0, 16) === date.toString().slice(0, 16)) {
       days.days[0]?.day?.push(response.list[i]);
     } else {
@@ -63,5 +65,5 @@ const toDateTime = (secs: number) => {
   return t;
 };
 
-export const { getWeather } = weatherSlice.actions;
+export const { getWeather, setErrorMessage } = weatherSlice.actions;
 export default weatherSlice.reducer;

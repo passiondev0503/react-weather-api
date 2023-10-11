@@ -1,6 +1,7 @@
 export interface Response {
   list: ListElement[];
   city: City;
+  cod: string;
 }
 
 export interface City {
