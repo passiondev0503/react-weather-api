@@ -35,12 +35,8 @@ span.disabled {
   box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.3) !important;
 }
 
-w-12 {
-  width: 12.5% !important;
-}
-
-.rem {
-  font-size: 1vw;
+.transition {
+  transition: 2s;
 }
 
 @media screen and (max-width: 768px) {
