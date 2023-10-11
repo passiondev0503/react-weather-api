@@ -9,11 +9,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getWeatherByCity } from '../Api/epics';
 import { RootState } from '../Api/store';
 import { RequestLocation, getCookie, setCookie } from '../Api/Requests';
+import { Dropdown, InputGroup } from 'react-bootstrap';
+import { toast } from 'react-hot-toast';
+
+const SwitchThemes = () => {
+  var element = document.body;
+  element.dataset.bsTheme = element.dataset.bsTheme == 'light' ? 'dark' : 'light';
+};
 
 function AppNavbar() {
   const dispatch = useDispatch();
 
   const [search, setSearch] = useState('');
+  const [theme, setTheme] = useState(document.body.dataset.bsTheme);
+
+  const error: String | undefined = useSelector((state: RootState) => {
+    return state.weather.error;
+  });
 
   useEffect(() => {
     if (getCookie('City') !== null) {
@@ -29,6 +41,14 @@ function AppNavbar() {
   const searchCity = () => {
     if (search === '') return;
     dispatch(getWeatherByCity(search));
+    if (error)
+      toast.error(error.toString(), {
+        duration: 1000,
+        style: {
+          background: '#333',
+          color: '#fff',
+        },
+      });
   };
 
   const city = useSelector((state: RootState) => {
@@ -42,24 +62,44 @@ function AppNavbar() {
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll></Nav>
-          <Navbar.Brand>{city ? city.name : ''}</Navbar.Brand>
+          <Dropdown className="me-2">
+            <Dropdown.Toggle variant="disabled" id="dropdown-basic">
+              Settings
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <div className="d-flex p-2">
+                <p className="m-0">Dark theme</p>
+                <Form.Check
+                  type="switch"
+                  className="ms-auto"
+                  checked={theme === 'dark'}
+                  onClick={() => {
+                    SwitchThemes();
+                    setTheme(theme == 'light' ? 'dark' : 'light');
+                  }}
+                ></Form.Check>
+              </div>
+            </Dropdown.Menu>
+          </Dropdown>
           <Form
-            className="d-flex"
+            className="d-flex me-2"
             onSubmit={(e) => {
               e.preventDefault();
               searchCity();
             }}
           >
-            <Form.Control
-              type="search"
-              placeholder="Search city"
-              className="me-2 shadow-sm"
-              aria-label="Search"
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <Button variant="outline-customlightblue shadow-sm" type="submit">
-              Search
-            </Button>
+            <InputGroup>
+              <Form.Control
+                type="search"
+                placeholder={city ? city.name : ''}
+                className="shadow-sm"
+                aria-label="Search"
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <Button variant="outline-customlightblue shadow-sm" type="submit">
+                Search
+              </Button>
+            </InputGroup>
           </Form>
         </Navbar.Collapse>
       </Container>

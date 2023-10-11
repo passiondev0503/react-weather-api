@@ -4,7 +4,7 @@ import { City, Day, Days, Response } from '../Types/Response';
 export interface weatherState {
   City: City;
   Days: Days;
-  error?: string;
+  error?: String;
 }
 const initialState: weatherState = {
   City: {} as City,
@@ -15,16 +15,13 @@ export const weatherSlice = createSlice({
   name: 'weather',
   initialState,
   reducers: {
-    getWeather: (state, action: PayloadAction<Response>) => {
+    setWeather: (state, action: PayloadAction<Response>) => {
       if (action.payload.cod === '404') {
-        setErrorMessage('City does not exist');
+        state.error = 'City not found';
       } else {
         state.City = action.payload.city;
         state.Days = GetDays(action.payload);
       }
-    },
-    setErrorMessage: (state, action: PayloadAction<String>) => {
-      state.error = '';
     },
     clearErrorMessage: (state) => {
       state.error = '';
@@ -63,5 +60,5 @@ export const toDateTime = (secs: number) => {
   return t;
 };
 
-export const { getWeather, setErrorMessage } = weatherSlice.actions;
+export const { setWeather, clearErrorMessage } = weatherSlice.actions;
 export default weatherSlice.reducer;

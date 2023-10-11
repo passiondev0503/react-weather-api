@@ -2,11 +2,13 @@ import { catchError, from, Observable, of, throwError } from 'rxjs';
 import { Response } from '../Types/Response';
 import { getWeatherByCity } from './epics';
 
+const configValue: string | undefined = process.env.REACT_APP_WEATHER_API_KEY;
+
 interface CityRespose {
   city: string;
 }
 export function RequestWeather(city: string): Observable<Response> {
-  const apiCall = fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=1a5ac5a7023db30b858ffab987225a92&units=metric`)
+  const apiCall = fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${configValue}&units=metric`)
     .then((response) => response.json())
     .then((responseJson) => {
       return responseJson as Response;
