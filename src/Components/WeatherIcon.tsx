@@ -1,17 +1,3 @@
-import { useEffect, useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import { useDispatch, useSelector } from 'react-redux';
-import { getWeatherByCity } from '../Api/epics';
-import { RootState } from '../Api/store';
-import { RequestLocation, getCookie } from '../Api/Requests';
-import { Card, Col, Row } from 'react-bootstrap';
-import { Response } from '../Types/Response';
-
 function WeatherIcon(props: { id: string }) {
   let icon = <></>;
   if (props.id == '01d')

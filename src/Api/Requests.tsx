@@ -1,5 +1,6 @@
 import { catchError, from, Observable, of, throwError } from 'rxjs';
 import { Response } from '../Types/Response';
+import { getWeatherByCity } from './epics';
 
 interface CityRespose {
   city: string;
@@ -21,16 +22,7 @@ export function RequestLocation() {
     .then((responseJson: CityRespose) => {
       return responseJson.city;
     });
-  return from(apiCall).subscribe({
-    next(x) {
-      setCookie({
-        name: 'City',
-        value: x,
-        expires_second: 365 * 24 * 60 * 60,
-        path: '/',
-      });
-    },
-  });
+  return from(apiCall);
 }
 
 export function getCookie(name: string) {
