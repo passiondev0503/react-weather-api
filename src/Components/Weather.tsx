@@ -12,6 +12,7 @@ import { RequestLocation, getCookie } from '../Api/Requests';
 import { Card, Col, Row } from 'react-bootstrap';
 import { City, Day, Days, ListElement, Response } from '../Types/Response';
 import WeatherIcon from './WeatherIcon';
+import { toDateTime } from '../Api/WeatherSlice';
 
 const getDateSting = (time: Date) => {
   const day = time.getDate();
@@ -27,13 +28,13 @@ const getTimeSting = (time: Date) => {
   const shour = hour <= 9 ? '0' + hour : hour;
   const minute = time.getMinutes();
   const sminute = minute <= 9 ? '0' + minute : minute;
-  const second = time.getSeconds();
-  const ssecond = second <= 9 ? '0' + second : second;
-  return shour + ':' + sminute + ':' + ssecond;
+  return shour + ':' + sminute;
 };
 
 function Weather() {
   const dispatch = useDispatch();
+  const [day, setDay] = useState(0);
+  const [hour, setHour] = useState(0);
   const [list, setList] = useState<ListElement[]>();
   const city: City = useSelector((state: RootState) => {
     return state.weather.City;
@@ -41,45 +42,6 @@ function Weather() {
   const weather: Days = useSelector((state: RootState) => {
     return state.weather.Days;
   });
-
-  let time = new Date();
-  const [ctime, setCTime] = useState<Date>();
-
-  time.setHours(
-    time.getHours() + city?.timezone / 3600 + time.getTimezoneOffset() / 60
-  );
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      time = new Date();
-      time.setHours(
-        time.getHours() + city?.timezone / 3600 + time.getTimezoneOffset() / 60
-      );
-      setCTime(time);
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
-  // useEffect(() => {
-  //     if (weather) {
-  //         const List = weather.list;
-  //         List?.map(e => {
-  //             if (new Date().toUTCString().slice(0, 16) === toDateTime(e.dt + weather?.city?.timezone).toUTCString().slice(0, 16)) {
-  //                 console.log(e)
-  //             }
-  //         })
-  //         // List?.map(e => {
-  //         //     if (toDateTime(e.dt + weather?.city?.timezone).toUTCString().slice(0, 16) === time.toUTCString().slice(0, 16)) {
-  //         //         console.log(toDateTime(e.dt + weather?.city?.timezone).toUTCString())
-  //         //     }
-  //         // }
-  //         //)
-  //         setList(List)
-  //     }
-  // }, [weather]);
 
   return (
     <Container>
@@ -92,43 +54,63 @@ function Weather() {
                   <h3 className="m-0 mb-2">
                     {city.name}, {city.country}
                   </h3>
-                  <h3 className="m-0">{getDateSting(time)}</h3>
-                  <h3 className="m-0">{getTimeSting(time)}</h3>
+                  <h3 className="m-0">
+                    {getDateSting(toDateTime(weather.days[0].day[0]?.dt + city.timezone + new Date().getTimezoneOffset() * 60))}
+                  </h3>
+                  <h3 className="m-0">
+                    {getTimeSting(toDateTime(weather.days[0].day[0]?.dt + city.timezone + new Date().getTimezoneOffset() * 60))}
+                  </h3>
                 </Col>
                 <Col className="mb-3">
                   <Row>
                     <Col className="d-flex justify-content-end">
                       <div className="w-75">
-                        <WeatherIcon
-                          id={weather.days[0].day[0]?.weather[0].icon}
-                        ></WeatherIcon>
+                        <WeatherIcon id={weather.days[0].day[hour]?.weather[0].icon}></WeatherIcon>
                       </div>
                     </Col>
                     <Col className="d-flex justify-content-start flex-column p-0">
                       <h2 className="m-0">
-                        {Math.round(weather.days[0].day[0]?.main.temp)}
+                        {Math.round(weather.days[0].day[hour]?.main.temp)}
                         {'\u00b0'}
                       </h2>
-                      <h5 className="m-0">
-                        {weather.days[0].day[0]?.weather[0].description}
-                      </h5>
+                      <h5 className="m-0">{weather.days[0].day[hour]?.weather[0].description}</h5>
                     </Col>
                   </Row>
                 </Col>
                 <Col className="d-flex flex-column text-end">
-                  <h5 className="m-0">
-                    Wind: {weather.days[0].day[0]?.wind.speed} m/s
-                  </h5>
-                  <h5 className="m-0">
-                    Humidity: {weather.days[0].day[0]?.main.humidity}%
-                  </h5>
-                  <h5 className="m-0">
-                    Clouds: {weather.days[0].day[0]?.clouds.all}%
-                  </h5>
+                  <h5 className="m-0">Wind: {weather.days[0].day[hour]?.wind.speed} m/s</h5>
+                  <h5 className="m-0">Humidity: {weather.days[0].day[hour]?.main.humidity}%</h5>
+                  <h5 className="m-0">Clouds: {weather.days[0].day[hour]?.clouds.all}%</h5>
                 </Col>
               </Row>
-              <Row></Row>
+              <Row className="mt-3">
+                {weather.days[0]?.day.map((e, index) => (
+                  <Card
+                    key={index}
+                    className={index === hour ? 'text-white bg-customblue rounded-0 w-12 p-0' : 'text-white bg-customlightblue rounded-0 w-12 p-0'}
+                    onClick={() => setHour(index)}
+                  >
+                    <Card.Body className="p-1">
+                      <p className="m-0 text-center rem">
+                        {Math.round(e.main.temp)}
+                        {'\u00b0'}
+                      </p>
+                      <div className="d-flex justify-content-center">
+                        <p className="m-0 w-50 text-center rem">
+                          <WeatherIcon id={e.weather[0].icon}></WeatherIcon>
+                        </p>
+                      </div>
+                      <p className="m-0 text-center rem">{getTimeSting(toDateTime(e.dt + city.timezone + new Date().getTimezoneOffset() * 60))}</p>
+                    </Card.Body>
+                  </Card>
+                ))}
+              </Row>
               <Row>
+                <Col className="m-0 p-0">
+                  <Card className="mt-3 bg-customlightblue text-white">
+                    <Card.Body></Card.Body>
+                  </Card>
+                </Col>
                 <Col className="m-0 p-0">
                   <Card className="mt-3 bg-customlightblue text-white">
                     <Card.Body></Card.Body>

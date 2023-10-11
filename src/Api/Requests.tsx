@@ -6,9 +6,7 @@ interface CityRespose {
   city: string;
 }
 export function RequestWeather(city: string): Observable<Response> {
-  const apiCall = fetch(
-    `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=1a5ac5a7023db30b858ffab987225a92&units=metric`
-  )
+  const apiCall = fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=1a5ac5a7023db30b858ffab987225a92&units=metric`)
     .then((response) => response.json())
     .then((responseJson) => {
       return responseJson as Response;

@@ -31,6 +31,14 @@ span.disabled {
   box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.3) !important;
 }
 
+w-12 {
+  width: 12.5% !important;
+}
+
+.rem {
+  font-size: 1vw;
+}
+
 @media screen and (max-width: 768px) {
   .Row {
     flex-direction: column;
