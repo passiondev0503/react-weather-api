@@ -1,7 +1,5 @@
-import { catchError, from, map, Observable, of, throwError } from 'rxjs';
+import { catchError, from, map, Observable } from 'rxjs';
 import { Response } from '../Types/Response';
-import { getWeatherByCity } from './epics';
-import { toast } from 'react-hot-toast';
 
 const configValue: string | undefined = process.env.REACT_APP_WEATHER_API_KEY;
 
@@ -60,10 +58,10 @@ export function getCookie(name: string) {
   let ca = document.cookie.split(';');
   for (let i = 0; i < ca.length; i++) {
     let c = ca[i];
-    while (c.charAt(0) == ' ') {
+    while (c.charAt(0) === ' ') {
       c = c.substring(1);
     }
-    if (c.indexOf(name) == 0) {
+    if (c.indexOf(name) === 0) {
       return decodeURIComponent(c.substring(name.length, c.length));
     }
   }

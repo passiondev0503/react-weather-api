@@ -1,16 +1,9 @@
 import { useEffect, useState } from 'react';
-import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import { useDispatch, useSelector } from 'react-redux';
-import { getWeatherByCity } from '../Api/epics';
+import { useSelector } from 'react-redux';
 import { RootState } from '../Api/store';
-import { RequestLocation, getCookie } from '../Api/Requests';
 import { Card, Col, Row } from 'react-bootstrap';
-import { City, Day, Days, ListElement, Response } from '../Types/Response';
+import { City, Days, ListElement } from '../Types/Response';
 import WeatherIcon from './WeatherIcon';
 import { toDateTime } from '../Api/WeatherSlice';
 
@@ -48,10 +41,8 @@ const getMinAndMaxTemp = (list: ListElement[]) => {
 };
 
 function Weather() {
-  const dispatch = useDispatch();
   const [day, setDay] = useState(0);
   const [hour, setHour] = useState(0);
-  const [list, setList] = useState<ListElement[]>();
   const city: City = useSelector((state: RootState) => {
     return state.weather.City;
   });

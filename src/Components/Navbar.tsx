@@ -4,17 +4,15 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useDispatch, useSelector } from 'react-redux';
 import { getWeatherByCity } from '../Api/epics';
 import { RootState } from '../Api/store';
 import { RequestLocation, getCookie, setCookie, RequestCity } from '../Api/Requests';
 import { Dropdown, InputGroup } from 'react-bootstrap';
-import { toast } from 'react-hot-toast';
 
 const SwitchThemes = () => {
   var element = document.body;
-  element.dataset.bsTheme = element.dataset.bsTheme == 'light' ? 'dark' : 'light';
+  element.dataset.bsTheme = element.dataset.bsTheme === 'light' ? 'dark' : 'light';
 };
 
 function AppNavbar() {
@@ -81,7 +79,7 @@ function AppNavbar() {
                   checked={theme === 'dark'}
                   onClick={() => {
                     SwitchThemes();
-                    setTheme(theme == 'light' ? 'dark' : 'light');
+                    setTheme(theme === 'light' ? 'dark' : 'light');
                   }}
                 ></Form.Check>
               </div>

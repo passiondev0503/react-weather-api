@@ -66,7 +66,7 @@ function sendErrorToast(error: string) {
     background: '#333',
     color: '#fff',
   };
-  if (document.body.dataset.bsTheme == 'light') {
+  if (document.body.dataset.bsTheme === 'light') {
     style.background = '#fff';
     style.color = '#333';
   }
