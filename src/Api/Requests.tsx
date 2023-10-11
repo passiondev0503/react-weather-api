@@ -1,19 +1,30 @@
-import { catchError, from, Observable, of, throwError } from 'rxjs';
+import { catchError, from, map, Observable, of, throwError } from 'rxjs';
 import { Response } from '../Types/Response';
 import { getWeatherByCity } from './epics';
+import { toast } from 'react-hot-toast';
 
 const configValue: string | undefined = process.env.REACT_APP_WEATHER_API_KEY;
 
 interface CityRespose {
   city: string;
 }
-export function RequestWeather(city: string): Observable<Response> {
+export function RequestWeather(city: string): Observable<any> {
   const apiCall = fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${configValue}&units=metric`)
     .then((response) => response.json())
     .then((responseJson) => {
       return responseJson as Response;
     });
-  return from(apiCall);
+  return from(apiCall).pipe(
+    map((res) => {
+      if (res.cod === '404') {
+        throw 'City not found';
+      }
+      return res;
+    }),
+    catchError((error) => {
+      throw error;
+    })
+  );
 }
 
 export function RequestLocation() {
